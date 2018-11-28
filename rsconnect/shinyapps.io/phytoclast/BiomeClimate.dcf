@@ -1,0 +1,12 @@
+name: BiomeClimate
+title: BiomeClimate
+username:
+account: phytoclast
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 593633
+bundleId: 1726599
+url: https://phytoclast.shinyapps.io/BiomeClimate/
+when: 1543429795.83552
+asMultiple: FALSE
+asStatic: FALSE
