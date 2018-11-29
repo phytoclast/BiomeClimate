@@ -18,7 +18,9 @@ pageWithSidebar(
     htmlOutput("ECO_NAME"),
     htmlOutput("elev"),
     htmlOutput("lat"),
-    htmlOutput("lon")
+    htmlOutput("lon"),
+    htmlOutput("temp"),
+    htmlOutput("prec")
 
 
   ),

@@ -21,18 +21,24 @@ shinyServer(function(input, output) {
     lat <- c(0, 80)
     lon <- c(-150, -50) 
     elev <- c(-432, 8848) 
+    temp <- c(-30, 35) 
+    prec <- c(0, 9000) 
     biomnm <- ''
     econame <- ''
     
     output$Biome = renderUI({
       listBiome1 <- subset(Biomeclimate,
-                         Latitude >= input$lat[1] &
-                           Latitude <= input$lat[2] &
-                           Longitude >= input$lon[1] &
-                           Longitude <= input$lon[2] &
-                           Elevation >= input$elev[1] &
-                           Elevation <= input$elev[2]
-                           )
+                           Latitude >= input$lat[1] &
+                             Latitude <= input$lat[2] &
+                             Longitude >= input$lon[1] &
+                             Longitude <= input$lon[2] &
+                             Elevation >= input$elev[1] &
+                             Elevation <= input$elev[2] &
+                             TT >= input$temp[1] &
+                             TT <= input$temp[2]&
+                             PP >= input$prec[1] &
+                             PP <= input$prec[2]
+      )
       listBiome <- unique(listBiome1[, c('biomname')])
       
       
@@ -51,6 +57,10 @@ shinyServer(function(input, output) {
                            Longitude <= input$lon[2] &
                            Elevation >= input$elev[1] &
                            Elevation <= input$elev[2] &
+                           TT >= input$temp[1] &
+                           TT <= input$temp[2] &
+                           PP >= input$prec[1] &
+                           PP <= input$prec[2] &
                            grepl(input$Biome, biomname))
       listEco <- unique(listEco1[, c('ECO_NAME')])
       
@@ -86,11 +96,33 @@ shinyServer(function(input, output) {
                   dragRange = TRUE)
       
     })
-  output$climplot <- renderPlot({ 
+    
+    output$temp = renderUI({
+      
+      sliderInput(inputId = 'temp',
+                  label = 'Mean Annual Air Temperature range',
+                  min= -30, max= 35,
+                  value= c(-30, 35), step = 1,
+                  dragRange = TRUE)
+      
+    })
+    
+    output$prec = renderUI({
+      
+      sliderInput(inputId = 'prec',
+                  label = 'Mean Annual Precipitation range',
+                  min= 0, max= 9000,
+                  value= c(0, 9000), step = 50,
+                  dragRange = TRUE)
+      
+    })
+    output$climplot <- renderPlot({ 
     #parameters
     lat <- c(0, 80)
     lon <- c(-150, -50) 
     elev <- c(-432, 8848) 
+    temp <- c(-30, 35) 
+    prec <- c(0, 9000) 
     biomnm <- input$Biome
     econame <- input$ECO_NAME
     
@@ -104,6 +136,10 @@ shinyServer(function(input, output) {
                            Longitude <= input$lon[2] &
                            Elevation >= input$elev[1] &
                            Elevation <= input$elev[2] &
+                           TT >= input$temp[1] &
+                           TT <= input$temp[2] &
+                           PP >= input$prec[1] &
+                           PP <= input$prec[2] &
                            grepl(biomnm, biomname) &
                            grepl(econame, ECO_NAME))
     
