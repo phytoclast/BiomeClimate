@@ -14,7 +14,7 @@ library(plyr)
 
 ######
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
  rv <- reactiveValues(my_text = "") 
     #parameters
@@ -27,6 +27,7 @@ shinyServer(function(input, output) {
     econame <- ''
     
     output$Biome = renderUI({
+      
       listBiome1 <- subset(Biomeclimate,
                            Latitude >= input$lat[1] &
                              Latitude <= input$lat[2] &
@@ -50,6 +51,7 @@ shinyServer(function(input, output) {
     
     
     output$ECO_NAME = renderUI({
+
       listEco1 <- subset(Biomeclimate,
                            Latitude >= input$lat[1] &
                            Latitude <= input$lat[2] &
@@ -96,7 +98,7 @@ shinyServer(function(input, output) {
                   dragRange = TRUE)
       
     })
-    
+
     output$temp = renderUI({
       
       sliderInput(inputId = 'temp',
@@ -106,9 +108,9 @@ shinyServer(function(input, output) {
                   dragRange = TRUE)
       
     })
-    
+
     output$prec = renderUI({
-      
+
       sliderInput(inputId = 'prec',
                   label = 'Mean Annual Precipitation range',
                   min= 0, max= 9000,
@@ -116,7 +118,10 @@ shinyServer(function(input, output) {
                   dragRange = TRUE)
       
     })
-    output$climplot <- renderPlot({ 
+    
+    
+       output$climplot <- renderPlot({ 
+
     #parameters
     lat <- c(0, 80)
     lon <- c(-150, -50) 
@@ -283,6 +288,8 @@ shinyServer(function(input, output) {
     
 
     })
+
+    
   output$Climtext = renderText({ 
     rv$my_text2
     })
