@@ -85,7 +85,7 @@ shinyServer(function(input, output, session) {
       sliderInput(inputId = 'lat',
                   label = 'Latitude range',
                   min= -90, max= 90,
-                  value= c(25, 50), step = 5,
+                  value= c(25, 50), step = 1,
                   dragRange = TRUE)
       
     })
@@ -94,7 +94,7 @@ shinyServer(function(input, output, session) {
       sliderInput(inputId = 'lon',
                   label = 'Longitude range',
                   min= -180, max= 180,
-                  value= c(-150, -50), step = 5,
+                  value= c(-150, -50), step = 2.5,
                   dragRange = TRUE)
       
     })
