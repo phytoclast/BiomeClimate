@@ -25,6 +25,7 @@ shinyServer(function(input, output, session) {
     prec <- c(0, 9000) 
     biomnm <- ''
     econame <- ''
+    Norm <- 1990
     
     output$Biome = renderUI({
       
@@ -145,6 +146,7 @@ shinyServer(function(input, output, session) {
                            TT <= input$temp[2] &
                            PP >= input$prec[1] &
                            PP <= input$prec[2] &
+                           Norm == input$RadioNorm &
                            grepl(biomnm, biomname) &
                            grepl(econame, ECO_NAME))
     

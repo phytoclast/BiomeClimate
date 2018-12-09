@@ -26,8 +26,11 @@ pageWithSidebar(
   ),
   mainPanel(
     plotOutput("climplot"),
-    verbatimTextOutput('Climtext')
-    
+    verbatimTextOutput('Climtext'),
+    radioButtons("RadioNorm", label = h2("Select Timeframe"),
+                 choices = list('Last Glacial Maximum ~26,500 years ago (model: CCSM4)' = -25000, 'Current ~1961-1990 (WorldClim 1.4, http://worldclim.org/)' = 1990,
+                                'Moderate global warming at year 2070 (scenario = rcp45, model = CCSM4)' = 2070), 
+                 selected = 1990)
   )
 )
-
+                                
