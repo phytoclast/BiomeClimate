@@ -29,7 +29,7 @@ shinyServer(function(input, output, session) {
     
     output$Biome = renderUI({
       
-      listBiome1 <- subset(Biomeclimate,
+      listBiome1 <- subset(Biomeclimate[order(Biomeclimate$BIOME),],
                            Latitude >= input$lat[1] &
                              Latitude <= input$lat[2] &
                              Longitude >= input$lon[1] &
@@ -41,6 +41,7 @@ shinyServer(function(input, output, session) {
                              PP >= input$prec[1] &
                              PP <= input$prec[2]
       )
+      
       listBiome <- unique(listBiome1[, c('biomname')])
       
       
@@ -65,7 +66,7 @@ shinyServer(function(input, output, session) {
                            PP >= input$prec[1] &
                            PP <= input$prec[2] &
                            grepl(input$Biome, biomname))
-      listEco <- unique(listEco1[, c('ECO_NAME')])
+      listEco <- sort(unique(listEco1[, c('ECO_NAME')]))
       
       selectInput(inputId = "ECO_NAME", #name of input
                   label = "Select WWF Ecoregion:", #label displayed in ui
