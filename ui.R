@@ -46,10 +46,14 @@ fluidPage(
                         selected = 'm')
     )),
            fluidRow(
-                  HTML("<font size=-1.5>Last Glacial Maximum: ~26,500 years ago (model: CCSM4);<br>
+                  HTML("<font size=-2>Last Glacial Maximum: ~26,500 years ago (model: CCSM4);<br>
                  Mid Holocene: ~6000 years ago (model: CCSM4);<br> Current: ~1961-1990 (WorldClim 1.4, http://worldclim.org/);<br>
                  Moderate global warming: at year 2070 (scenario = RCP 4.5, model = CCSM4);<br>
-Stronger global warming: at year 2070 (scenario = RCP 8.5, model = CCSM4)</font>")
+Stronger global warming: at year 2070 (scenario = RCP 8.5, model = CCSM4)
+                       <br>More information about the 
+                      "),
+                  tags$a(href="https://www.researchgate.net/publication/327537609_Climate_Classification_Outline", "climate classification"),
+                  HTML(" used above.</font>")
            )
 
   )
