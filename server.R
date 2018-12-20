@@ -204,6 +204,12 @@ shinyServer(function(input, output, session) {
     Tcl<-mean(selectClim$Tcl, na.rm=TRUE)
     Tclx <- mean(selectClim$Tclx, na.rm=TRUE)
     
+    
+    SP1 <- round(ifelse(PPETRatio < 0.5 & Surplus < 25 & peakAET < 75, pmax(Surplus/25, peakAET/75)  ,1),15)
+    SP2 <- round(ifelse(SP1 >= 1, ifelse(peakAET < 75 & (Deficit >= 150 | PPETRatio < 1), pmax(peakAET/75, 150/(Deficit+150)),1),0),15)
+    SP3 <- round(ifelse(SP2 >= 1, ifelse(Deficit >= 150 | PPETRatio < 1, pmax(150/(Deficit+150)),1),0),15)
+    SP4 <- round(ifelse(SP3 >= 1, pmin(1-Deficit/150),0),15)
+    
     #Key to climate type_____________________________________________________
     
     
@@ -254,7 +260,7 @@ shinyServer(function(input, output, session) {
                       "Warm Month: ", round(Tw,1),"°C; High: ",round(Twh,1),"°C; ", "Cold Month: ", round(Tc,1),"°C; Low: ",round(Tcl,1),"°C","\n",
                       "Growing Season Temperature: ",round(SummerBioT,digits=1),"°C; Annual Extreme Low: ", round(Tclx,1),"°C","\n",
                       "P/PET: ", round(PPETRatio,2),"; Surplus: ", round(Surplus,0)," mm; Deficit: ", round(Deficit,0)," mm; Peak AET: ", round(peakAET,0), " mm","\n", Climatetext,sep="")
-
+#, "SPindex: ",round(SPindex,2),"; Cindex: ",round(Cindex,2),"\n"
     retro <- paste("Lat: ",round(Lat,digits=2),"°;  Lon: ", round(Lon,digits=2),"°;  Elev: ",round(Elev/0.3048,digits=0)," ft","\n",
                       "Annual Temperature: ",round(MAAT*1.8+32,digits=0),"°F;  ","Annual Precipitation: ", round(MAP/25.4,0)," in  ","\n",
                       "Warm Month: ", round(Tw*1.8+32,0),"°F; High: ",round(Twh*1.8+32,0),"°F; ", "Cold Month: ", round(Tc*1.8+32,0),"°F; Low: ",round(Tcl*1.8+32,0),"°F","\n",
