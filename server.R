@@ -209,6 +209,8 @@ shinyServer(function(input, output, session) {
     SP2 <- round(ifelse(SP1 >= 1, ifelse(peakAET < 75 & (Deficit >= 150 | PPETRatio < 1), pmax(peakAET/75, 150/(Deficit+150)),1),0),15)
     SP3 <- round(ifelse(SP2 >= 1, ifelse(Deficit >= 150 | PPETRatio < 1, pmax(150/(Deficit+150)),1),0),15)
     SP4 <- round(ifelse(SP3 >= 1, pmin(1-Deficit/150),0),15)
+    SPindex <- SP1 + SP2 + SP3 + SP4 + 1 #Seasonal precipitation index
+    Cindex <- pmin(Tclx+15, Tc) #Cold index
     
     #Key to climate type_____________________________________________________
     
