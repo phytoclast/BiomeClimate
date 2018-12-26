@@ -10,4 +10,5 @@ colnamesb1990 <- colnames(b1990)
 b1990 <- aggregate(b1990[,c('PP', 'TT')], by=list(b1990$Latitude, b1990$Longitude, b1990$Elevation), FUN='mean')
 colnames(b1990) <- colnamesb1990
 Biomeclimate <- merge(Biomeclimate, b1990, by=c('Latitude', 'Longitude','Elevation'))
+Biomeclimate$P <- apply(Biomeclimate[,c('p01', 'p02', 'p03', 'p04', 'p05', 'p06', 'p07', 'p08', 'p09', 'p10', 'p11', 'p12')], MARGIN=c(1), na.rm=TRUE, FUN='sum')
 rm(b1990, colnamesb1990)
