@@ -335,17 +335,17 @@ shinyServer(function(input, output, session) {
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
    theme(legend.position='right') 
  #Supplemental Graph2----
- bs1=data.frame(x=c(1,1,2,2), y=c(-4,-1,-1,-4))
- bs2=data.frame(x=c(2,2,3,3), y=c(-4,2,2,-4))
- bs3=data.frame(x=c(3,3,4,4), y=c(-4,2,2,-4))
- bs4=data.frame(x=c(4,4,5,5), y=c(0,2,2,0))
+ bs1=data.frame(y=c(1,1,2,2), x=c(-4,-1,-1,-4))
+ bs2=data.frame(y=c(2,2,3,3), x=c(-4,2,2,-4))
+ bs3=data.frame(y=c(3,3,4,4), x=c(-4,2,2,-4))
+ bs4=data.frame(y=c(4,4,5,5), x=c(0,2,2,0))
  
- bm1=data.frame(x=c(1,1,4,4), y=c(-4,-3,-3,-4))
- bm2=data.frame(x=c(1,1,4,4), y=c(-3,-2,-2,-3))
- bm3=data.frame(x=c(1,1,4,4), y=c(-2,-1,-1,-2))
- bm4=data.frame(x=c(2,2,4,4), y=c(-1,0,0,-1))
- bm5=data.frame(x=c(2,2,5,5), y=c(0,1,1,0))
- bm6=data.frame(x=c(2,2,5,5), y=c(1,2,2,1))
+ bm1=data.frame(y=c(1,1,4,4), x=c(-4,-3,-3,-4))
+ bm2=data.frame(y=c(1,1,4,4), x=c(-3,-2,-2,-3))
+ bm3=data.frame(y=c(1,1,4,4), x=c(-2,-1,-1,-2))
+ bm4=data.frame(y=c(2,2,4,4), x=c(-1,0,0,-1))
+ bm5=data.frame(y=c(2,2,5,5), x=c(0,1,1,0))
+ bm6=data.frame(y=c(2,2,5,5), x=c(1,2,2,1))
  
  climplot3 <- ggplot() +
    geom_polygon(data=bs1, mapping=aes(x=x, y=y, fill='isoxeric'),alpha = 0.2)+
@@ -358,8 +358,8 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bm4, mapping=aes(x=x, y=y, fill='subhumid'),alpha = 0.2)+
    geom_polygon(data=bm5, mapping=aes(x=x, y=y, fill='humid'),alpha = 0.2)+
    geom_polygon(data=bm6, mapping=aes(x=x, y=y, fill='perhumid'),alpha = 0.2)+
-   geom_point(data=selectClim, mapping=aes(x=SPindex, y=log2(PPETRatio)), color = 'black', size=0.1)+
-   geom_density2d(data=selectClim, mapping=aes(x=SPindex, y=log2(PPETRatio)),color = 'black',alpha = 0.25)+
+   geom_point(data=selectClim, mapping=aes(y=SPindex, x=log2(PPETRatio)), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(y=SPindex, x=log2(PPETRatio)),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("isoxeric" = "red",
                                           "xerothermic" = "blue",
                                           "pluviothermic" = "yellow",
@@ -371,14 +371,15 @@ shinyServer(function(input, output, session) {
                                           "humid" = "blue",
                                           "perhumid" = "purple"
    ))+
-   scale_x_continuous(name= "Seasonality", breaks=c(1, 2,3,4),
+   scale_y_continuous(name= "Seasonality", breaks=c(1, 2,3,4),
                       labels=c('Isoxeric', 'Xerothermic', 'Pluviothermic','Isopluvial'))+
-   scale_y_continuous(name= "P/PET Ratio", breaks=c(-4, -3, -2,-1,0,1),
+   scale_x_continuous(name= "P/PET Ratio", breaks=c(-4, -3, -2,-1,0,1),
                       labels=c('perarid', 'arid', 'semiarid','subhumid','humid','perhumid'))+
-   coord_fixed(ratio = 1/1,xlim = c(1,5), ylim = c(-4, 2))+
+   coord_fixed(ratio = 1/1, ylim = c(1,5), xlim = c(-4, 2))+
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
    theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 2.5, hjust = 1), axis.text.y = element_text(vjust = -2)) 
- #moisture x temperature
+
+  #moisture x temperature
  bw1=data.frame(y=c(0,0,6,6), x=c(-4,2,2,-4))
  bw2=data.frame(y=c(6,6,12,12), x=c(-4,2,2,-4))
  bw3=data.frame(y=c(12,12,18,18), x=c(-4,2,2,-4))
