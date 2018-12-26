@@ -310,7 +310,7 @@ shinyServer(function(input, output, session) {
     
  climplot2 <-  ggplot() +
       geom_polygon(data=a1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.3)+
-      geom_polygon(data=a2, mapping=aes(x=x, y=y, fill='subalpine'),alpha = 0.3)+
+      geom_polygon(data=a2, mapping=aes(x=x, y=y, fill='boreal'),alpha = 0.3)+
       geom_polygon(data=a3, mapping=aes(x=x, y=y, fill='temperate'),alpha = 0.3)+
       geom_polygon(data=a4, mapping=aes(x=x, y=y, fill='andean'),alpha = 0.3)+
       geom_polygon(data=a5, mapping=aes(x=x, y=y, fill='oceanic'),alpha = 0.3)+
@@ -319,12 +319,12 @@ shinyServer(function(input, output, session) {
       geom_point(data=selectClim, mapping=aes(x=Cindex, y=Tg), color = 'black', size=0.1)+
       geom_density2d(data=selectClim, mapping=aes(x=Cindex, y=Tg),color = 'black',alpha = 0.25)+
       scale_fill_manual("Legend", values = c("alpine" = "pink",
-                                             "subalpine" = "green",
-                                             "temperate" = "yellow",
+                                             "boreal" = "darkgreen",
+                                             "temperate" = "greenyellow",
                                              "andean" = "violet",
-                                             "oceanic" = "cyan",
+                                             "oceanic" = "darkcyan",
                                              "subtropical" = "orange",
-                                             "tropical" = "red"
+                                             "tropical" = "darkred"
       ))+
       scale_x_continuous(name= "Coldest Month (Annual Extreme Minimum)", 
                          breaks=c(-40, -35, -30, -25, -20,-15, -10,-5, 0,5, 10,15, 20,25,30),
