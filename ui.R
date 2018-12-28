@@ -39,19 +39,25 @@ fluidPage(
                  selected = 1990)
       ),
 
-    column(width = 3,
+    column(width = 2,
            radioButtons("RadioUnits", label = ("Select Units"),
                         choices = list('Metric System' = 'm', 
                                        'Medieval Units' = 'USC'), 
                         selected = 'm')
     ),
-    column(width = 3,
-           radioButtons("RadioGraphtype", label = ("Select Graph"),
-                        choices = list('Monthly' = 1, 
-                                       'Growing Season × Winter' = 2, 
-                                       'Moisture × Seasonality' = 3, 
-                                       'Growing Season × Moisture' = 4), 
-                        selected = 1)
+column(width = 5,
+           radioButtons("RadioGraphtype",inline = T,  label = ("Select Graph"),
+                        choiceNames = list(HTML("<font size=-2>Monthly"), 
+                                           HTML("Summer × Winter"),
+                                           HTML("Summer × Moisture"), 
+                                           HTML("Surplus × Deficit"),
+                                           HTML("Summer × pAET"),  
+                                           HTML("Winter × pAET"),
+                                           HTML("Moisture × Deficit"),
+                                           HTML("Moisture × Seasonality</font>")),
+                        choiceValues = list(1,2,4,5,6,7,8,3),
+                        selected = 1),
+           HTML("</font>")
     )),
            fluidRow(
                   HTML("<font size=-2>Last Glacial Maximum: ~26,500 years ago (model: CCSM4);<br>

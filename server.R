@@ -212,7 +212,9 @@ shinyServer(function(input, output, session) {
     selectClim$SP4 <- round(ifelse(selectClim$SP3 >= 1, pmin(1-selectClim$Deficit/150),0),15)
     selectClim$SPindex <- selectClim$SP1 + selectClim$SP2 + selectClim$SP3 + selectClim$SP4 + 1 #Seasonal precipitation index
     selectClim$Cindex <- pmin(selectClim$Tclx+15, selectClim$Tc) #Cold index
-    
+    selectClim$Dindex <- selectClim$Deficit/(selectClim$Deficit + 100)
+    selectClim$Sindex <- selectClim$Surplus/(selectClim$Surplus + 100)
+    selectClim$Aindex <- selectClim$pAET/(selectClim$pAET + 100)
     #Key to climate type_____________________________________________________
     
     
@@ -334,7 +336,7 @@ shinyServer(function(input, output, session) {
       scale_y_continuous(name= "Growing Season", breaks=c(0,6,12,18,24,30))+
       coord_fixed(ratio = 1/1,xlim = c(-40,30), ylim = c(0, 30))+
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
-   theme(legend.position='right') 
+   theme(legend.position='right',axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0)) 
  #Supplemental Graph2----
  bs1=data.frame(y=c(1,1,2,2), x=c(0,0.3333,0.3333,0))
  bs2=data.frame(y=c(2,2,3,3), x=c(0,1,1,0))
@@ -369,8 +371,8 @@ shinyServer(function(input, output, session) {
                                           "arid" = "orange",
                                           "semiarid" = "yellow",
                                           "subhumid" = "green",
-                                          "humid" = "blue",
-                                          "perhumid" = "purple"
+                                          "humid" = "cyan",
+                                          "perhumid" = "blue"
    ))+
    scale_y_continuous(name= "Seasonality", breaks=c(1, 2,3,4),
                       labels=c('Isoxeric', 'Xerothermic', 'Pluviothermic','Isopluvial'))+
@@ -378,24 +380,26 @@ shinyServer(function(input, output, session) {
                       labels=c('perarid', 'arid', 'semiarid','subhumid','humid','perhumid'))+
    coord_fixed(ratio = 1/9, ylim = c(1,5), xlim = c(0, 1))+
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
-   theme(legend.position='none', axis.text.x = element_text(angle = 0, vjust = 0, hjust = -0.5), axis.text.y = element_text(vjust = -2)) 
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 0, vjust = 0, hjust = -0.5), axis.text.y = element_text(vjust = -2), 
+         panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
 
   #moisture x temperature
- bw1=data.frame(y=c(0,0,6,6), x=c(-4,2,2,-4))
- bw2=data.frame(y=c(6,6,12,12), x=c(-4,2,2,-4))
- bw3=data.frame(y=c(12,12,18,18), x=c(-4,2,2,-4))
- bw4=data.frame(y=c(18,18,24,24), x=c(-4,2,2,-4))
- bw5=data.frame(y=c(24,24,30,30), x=c(-4,2,2,-4))
+ bw1=data.frame(y=c(0,0,6,6), x=c(0,1,1,0))
+ bw2=data.frame(y=c(6,6,12,12), x=c(0,1,1,0))
+ bw3=data.frame(y=c(12,12,18,18), x=c(0,1,1,0))
+ bw4=data.frame(y=c(18,18,24,24), x=c(0,1,1,0))
+ bw5=data.frame(y=c(24,24,30,30), x=c(0,1,1,0))
  
- bmm1=data.frame(y=c(0,0,30,30), x=c(-4,-3,-3,-4))
- bmm2=data.frame(y=c(0,0,30,30), x=c(-3,-2,-2,-3))
- bmm3=data.frame(y=c(0,0,30,30), x=c(-2,-1,-1,-2))
- bmm4=data.frame(y=c(0,0,30,30), x=c(-1,0,0,-1))
- bmm5=data.frame(y=c(0,0,30,30), x=c(0,1,1,0))
- bmm6=data.frame(y=c(0,0,30,30), x=c(1,2,2,1))
+ bmm1=data.frame(y=c(0,0,30,30), x=c(0,0.1111,0.1111,0))
+ bmm2=data.frame(y=c(0,0,30,30), x=c(0.1111,0.2,0.2,0.1111))
+ bmm3=data.frame(y=c(0,0,30,30), x=c(0.2,0.3333,0.333,0.2))
+ bmm4=data.frame(y=c(0,0,30,30), x=c(0.3333,0.5,0.5,0.3333))
+ bmm5=data.frame(y=c(0,0,30,30), x=c(0.5,0.6667,0.6667,0.5))
+ bmm6=data.frame(y=c(0,0,30,30), x=c(0.6667,1,1,0.6667))
  
 
-climplot4 <- ggplot() +
+ climplot4 <- ggplot() +
    geom_polygon(data=bw1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.2)+
    geom_polygon(data=bw2, mapping=aes(x=x, y=y, fill='cool'),alpha = 0.2)+
    geom_polygon(data=bw3, mapping=aes(x=x, y=y, fill='mild'),alpha = 0.2)+
@@ -407,9 +411,9 @@ climplot4 <- ggplot() +
    geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='subhumid'),alpha = 0.1)+
    geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='humid'),alpha = 0.1)+
    geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='perhumid'),alpha = 0.1)+
-  geom_point(data=selectClim, mapping=aes(x=log2(PPETRatio), y=Tg), color = 'black', size=0.1)+
-  geom_density2d(data=selectClim, mapping=aes(x=log2(PPETRatio), y=Tg),color = 'black',alpha = 0.25)+
-  scale_fill_manual("Legend", values = c("alpine" = "cyan",
+   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Tg), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(x=Mindex, y=Tg),color = 'black',alpha = 0.25)+
+   scale_fill_manual("Legend", values = c("alpine" = "cyan",
                                           "cool" = "green",
                                           "mild" = "yellow",
                                           "warm" = "orange",
@@ -423,19 +427,198 @@ climplot4 <- ggplot() +
    ))+
    scale_y_reverse(name= "Growing Season", breaks=c(6,12,18,24,30),
                    labels=c('alpine/arctic 6', 'cool 12', 'mild 18','warm 24','hot 30'))+
-   scale_x_continuous(name= "P/PET Ratio", breaks=c(-4, -3, -2,-1,0,1),
+   scale_x_continuous(name= "P/PET Ratio", breaks=c(0, .1111, .2,0.3333,0.5,0.6667),
                       labels=c('perarid', 'arid', 'semiarid','subhumid','humid','perhumid'))+
-   coord_fixed(ratio = 1/5,ylim = c(0,30), xlim = c(-4, 2))+
+   coord_fixed(ratio = 1/30,ylim = c(0,30), xlim = c(0, 1))+
    
-  labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
-  theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 2.5, hjust = 1), 
-         axis.text.y = element_text(vjust = 0)) 
+   labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 2.5, hjust = 1), 
+         axis.text.y = element_text(vjust = 0), 
+         panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
+
+ 
+ #surplus x deficit
+ b1=data.frame(y=c(0,0,0.2,0.2), x=c(0,0.6,0.6,0))
+ b2=data.frame(y=c(0,0,0.2,0.2), x=c(0.6,1,1,0.6))
+
+ humidline =data.frame(y=c(0,1), x=c(0,1))
+ b3=data.frame(y=c(0.2,0.2,1,1), x=c(0,0.6,0.6,0))
+ b4=data.frame(y=c(0.2,0.2,1,1), x=c(0.6,1,1,0.6))
+ climplot5 <- ggplot() +
+   geom_polygon(data=b1, mapping=aes(x=x, y=y, fill='b'),alpha = 0.2)+
+   geom_polygon(data=b2, mapping=aes(x=x, y=y, fill='a'),alpha = 0.2)+
+   geom_polygon(data=b3, mapping=aes(x=x, y=y, fill='d'),alpha = 0.2)+
+   geom_polygon(data=b4, mapping=aes(x=x, y=y, fill='c'),alpha = 0.2)+
+   geom_line(data=humidline, mapping=aes(x=x, y=y, fill='c'),color = 'black',alpha = 0.2)+
+   geom_point(data=selectClim, mapping=aes(x=Dindex, y=Sindex), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(x=Dindex, y=Sindex),color = 'black',alpha = 0.25)+
+   scale_fill_manual("Legend", values = c(
+                                          "a" = "red",
+                                          "b" = "yellow",
+                                          "c" = "green",
+                                          "d" = "blue"
+      
+   ))+
+   scale_y_continuous(name= "Surplus", breaks=c(0, 0.2, 0.3333,0.4286,0.5,0.6,0.75,0.8571),
+                   labels=c('0', '25', '50','75','100','150','300','600'))+
+   scale_x_continuous(name= "Deficit", breaks=c(0, 0.2, 0.3333,0.4286,0.5,0.6,0.75,0.8571),
+                      labels=c('0', '25', '50','75','100','150','300','600'))+
+   coord_fixed(ratio = 1/1, ylim = c(0, 1), xlim = c(0, 1))+
+   
+   labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0), 
+         axis.text.y = element_text(vjust = 0),panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
  #----
-    
+ #growingseason x pAET
+ bw1=data.frame(y=c(0,0,6,6), x=c(0,1,1,0))
+ bw2=data.frame(y=c(6,6,12,12), x=c(0,1,1,0))
+ bw3=data.frame(y=c(12,12,18,18), x=c(0,1,1,0))
+ bw4=data.frame(y=c(18,18,24,24), x=c(0,1,1,0))
+ bw5=data.frame(y=c(24,24,30,30), x=c(0,1,1,0))
+ 
+ bmm1=data.frame(y=c(0,0,30,30), x=c(0,0.2,0.2,0))
+ bmm2=data.frame(y=c(0,0,30,30), x=c(0.2,0.3333,0.3333,0.2))
+ bmm3=data.frame(y=c(0,0,30,30), x=c(0.3333,0.4286,0.4286,0.333))
+ bmm4=data.frame(y=c(0,0,30,30), x=c(0.4286,0.5,0.5,0.4286))
+ bmm5=data.frame(y=c(0,0,30,30), x=c(0.5,0.6,0.6,0.5))
+ bmm6=data.frame(y=c(0,0,30,30), x=c(0.6,0.75,0.75,0.6))
+ 
+ climplot6 <- ggplot() +
+   geom_polygon(data=bw1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.2)+
+   geom_polygon(data=bw2, mapping=aes(x=x, y=y, fill='cool'),alpha = 0.2)+
+   geom_polygon(data=bw3, mapping=aes(x=x, y=y, fill='mild'),alpha = 0.2)+
+   geom_polygon(data=bw4, mapping=aes(x=x, y=y, fill='warm'),alpha = 0.2)+
+   geom_polygon(data=bw5, mapping=aes(x=x, y=y, fill='hot'),alpha = 0.2)+
+   geom_polygon(data=bmm1, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm2, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm3, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Aindex, y=Tg), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(x=Aindex, y=Tg),color = 'black',alpha = 0.25)+
+   scale_fill_manual("Legend", values = c("alpine" = "cyan",
+                                          "cool" = "green",
+                                          "mild" = "yellow",
+                                          "warm" = "orange",
+                                          "hot" = "red",
+                                          "a" = "blue",
+                                          "b" = "yellow"
+   ))+
+   scale_y_reverse(name= "Growing Season", breaks=c(6,12,18,24,30),
+                   labels=c('alpine/arctic 6', 'cool 12', 'mild 18','warm 24','hot 30'))+
+   scale_x_continuous(name= "Peak Monthly Actual Evapotranspiration", breaks=c(0, 0.2, 0.3333,0.4286,0.5,0.6,0.75),
+                      labels=c('0', '25', '50','75','100','150','300'))+
+   coord_fixed(ratio = 1/30,ylim = c(0,30), xlim = c(0, 1))+
+   
+   labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0), 
+         axis.text.y = element_text(vjust = 0),panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
+ #winter x pAET
+ bw1=data.frame(x=c(-100,-100,-25,-25), y=c(0,1,1,0))
+ bw2=data.frame(x=c(-25,-25,0,0), y=c(0,1,1,0))
+ bw3=data.frame(x=c(0,0,15,15), y=c(0,1,1,0))
+ bw4=data.frame(x=c(15,15,100,100), y=c(0,1,1,0))
+ 
+ bmm1=data.frame(x=c(-100,-100,100,100), y=c(0,0.2,0.2,0))
+ bmm2=data.frame(x=c(-100,-100,100,100), y=c(0.2,0.3333,0.3333,0.2))
+ bmm3=data.frame(x=c(-100,-100,100,100), y=c(0.3333,0.4286,0.4286,0.333))
+ bmm4=data.frame(x=c(-100,-100,100,100), y=c(0.4286,0.5,0.5,0.4286))
+ bmm5=data.frame(x=c(-100,-100,100,100), y=c(0.5,0.6,0.6,0.5))
+ bmm6=data.frame(x=c(-100,-100,100,100), y=c(0.6,1,1,0.6))
+ 
+ climplot7 <- ggplot() +
+   geom_polygon(data=bw1, mapping=aes(x=x, y=y, fill='polar'),alpha = 0.2)+
+   geom_polygon(data=bw2, mapping=aes(x=x, y=y, fill='temperate'),alpha = 0.2)+
+   geom_polygon(data=bw3, mapping=aes(x=x, y=y, fill='subtropical'),alpha = 0.2)+
+   geom_polygon(data=bw4, mapping=aes(x=x, y=y, fill='tropical'),alpha = 0.2)+
+   
+   geom_polygon(data=bmm1, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm2, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm3, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Cindex, y=Aindex), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(x=Cindex, y=Aindex),color = 'black',alpha = 0.25)+
+   scale_fill_manual("Legend", values = c("polar" = "orange",
+                                          "temperate" = "yellow",
+                                          "mild" = "yellowgreen",
+                                          "tropical" = "darkgreen",
+                                          
+                                          "a" = "blue",
+                                          "b" = "yellow"
+   ))+
+   scale_x_continuous(name= "Coldest Month (Annual Extreme Minimum)", breaks=c(-40, -35, -30, -25, -20,-15, -10,-5, 0,5, 10,15, 20,25,30),
+                      labels=c('-40 (-55)', '-35 (-50)','-30 (-45)', '-25 (-40)','-20 (-35)','-15 (-30)','-10 (-25)',
+                               '-5 (-20)','0 (-15)','5 (-10)','10 (-5)','15 (0)','20 (5)','25 (10)','30 (15)'))+
+   scale_y_continuous(name= "Peak Monthly Actual Evapotranspiration", breaks=c(0, 0.2, 0.3333,0.4286,0.5,0.6,0.75),
+                      labels=c('0', '25', '50','75','100','150','300'))+
+   coord_fixed(ratio = 30/1,xlim = c(-40,30), ylim = c(0,1))+
+   
+   labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0), 
+         axis.text.y = element_text(vjust = 0),panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
+ 
+ #Moisture x pAET
+ bmm1=data.frame(x=c(0,0,1,1), y=c(0,0.6,0.6,0))
+ bmm2=data.frame(x=c(0,0,1,1), y=c(0.6,1,1,0.6))
+ 
+ bm1=data.frame(y=c(0,0,1,1), x=c(0,0.1111,0.1111,0))
+ bm2=data.frame(y=c(0,0,1,1), x=c(0.1111,0.2,0.2,0.1111))
+ bm3=data.frame(y=c(0,0,1,1), x=c(0.2,0.3333,0.333,0.2))
+ bm4=data.frame(y=c(0,0,1,1), x=c(0.3333,0.5,0.5,0.3333))
+ bm5=data.frame(y=c(0,0,1,1), x=c(0.5,0.6667,0.6667,0.5))
+ bm6=data.frame(y=c(0,0,1,1), x=c(0.6667,1,1,0.6667))
+ 
+ climplot8 <- ggplot() +
+   geom_polygon(data=bm1, mapping=aes(x=x, y=y, fill='perarid'),alpha = 0.2)+
+   geom_polygon(data=bm2, mapping=aes(x=x, y=y, fill='arid'),alpha = 0.2)+
+   geom_polygon(data=bm3, mapping=aes(x=x, y=y, fill='semiarid'),alpha = 0.2)+
+   geom_polygon(data=bm4, mapping=aes(x=x, y=y, fill='subhumid'),alpha = 0.2)+
+   geom_polygon(data=bm5, mapping=aes(x=x, y=y, fill='humid'),alpha = 0.2)+
+   geom_polygon(data=bm6, mapping=aes(x=x, y=y, fill='perhumid'),alpha = 0.2)+
+   geom_polygon(data=bmm1, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
+   geom_polygon(data=bmm2, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
+   
+   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Dindex), color = 'black', size=0.1)+
+   geom_density2d(data=selectClim, mapping=aes(x=Mindex, y=Dindex),color = 'black',alpha = 0.25)+
+   scale_fill_manual("Legend", values = c("perarid" = "red",
+                                          "arid" = "orange",
+                                          "semiarid" = "yellow",
+                                          "subhumid" = "green",
+                                          "humid" = "cyan",
+                                          "perhumid" = "blue",
+                                          
+                                          "a" = "yellow",
+                                          "b" = "cyan"
+   ))+
+   scale_x_continuous(name= "P/PET Ratio", breaks=c(0, .1111, .2,0.3333,0.5,0.6667),
+                      labels=c('perarid', 'arid', 'semiarid','subhumid','humid','perhumid'))+
+   scale_y_continuous(name= "Deficit", breaks=c(0, 0.2, 0.3333,0.4286,0.5,0.6,0.75),
+                      labels=c('0', '25', '50','75','100','150','300'))+
+   coord_fixed(ratio = 1/1,xlim = c(0,1), ylim = c(0, 1))+
+   
+   labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
+   theme_bw()+
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0), 
+         axis.text.y = element_text(vjust = 0),panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
+ 
+ #----
+ 
+ 
 if(input$RadioGraphtype == 1){climplot} 
 else if(input$RadioGraphtype == 2) {climplot2}
-else if(input$RadioGraphtype == 3) {climplot3}
-else{climplot4}
+ else if(input$RadioGraphtype == 3) {climplot3}
+ else if(input$RadioGraphtype == 4) {climplot4}
+ else if(input$RadioGraphtype == 5) {climplot5}
+ else if(input$RadioGraphtype == 6) {climplot6}
+ else if(input$RadioGraphtype == 7) {climplot7}
+else{climplot8}
 
     
 
