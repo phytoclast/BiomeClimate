@@ -302,42 +302,44 @@ shinyServer(function(input, output, session) {
       coord_fixed(ratio = 1/9,xlim = c(1,12), ylim = c(-20, 43))+
       labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))# ,  subtitle = my_text1)
 #Supplemental Graph1----
-    a1=data.frame(x=c(-40,-40,0,0), y=c(0,6,6,0))
-    a2=data.frame(x=c(-40,-40,0,0), y=c(6,12,12,6))
-    a3=data.frame(x=c(-40,-40,0,0), y=c(12,30,30,12))
+    a1=data.frame(x=c(-50,-50,0,0), y=c(0,6,6,0))
+    a2=data.frame(x=c(-50,-50,0,0), y=c(6,12,12,6))
+    a3=data.frame(x=c(-50,-50,0,0), y=c(12,36,36,12))
     a4=data.frame(x=c(0,0,6,0), y=c(0,6,6,0))
     a5=data.frame(x=c(0,0,18,6), y=c(6,18,18,6))
-    a6=data.frame(x=c(0,0,15,15), y=c(18,30,30,18))
-    a7=data.frame(x=c(15,15,30,18), y=c(18,30,30,18))
-    
+    a6=data.frame(x=c(0,0,15,15), y=c(18,36,36,18))
+    a7=data.frame(x=c(15,15,36,18), y=c(18,36,36,18))
     
  climplot2 <-  ggplot() +
-      geom_polygon(data=a1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.3)+
-      geom_polygon(data=a2, mapping=aes(x=x, y=y, fill='boreal'),alpha = 0.3)+
-      geom_polygon(data=a3, mapping=aes(x=x, y=y, fill='temperate'),alpha = 0.3)+
-      geom_polygon(data=a4, mapping=aes(x=x, y=y, fill='andean'),alpha = 0.3)+
-      geom_polygon(data=a5, mapping=aes(x=x, y=y, fill='oceanic'),alpha = 0.3)+
-      geom_polygon(data=a6, mapping=aes(x=x, y=y, fill='subtropical'),alpha = 0.3)+
-      geom_polygon(data=a7, mapping=aes(x=x, y=y, fill='tropical'),alpha = 0.3)+
-      geom_point(data=selectClim, mapping=aes(x=Cindex, y=Tg), color = 'black', size=0.1)+
+      geom_polygon(data=a1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.5)+
+      geom_polygon(data=a2, mapping=aes(x=x, y=y, fill='boreal'),alpha = 0.5)+
+      geom_polygon(data=a3, mapping=aes(x=x, y=y, fill='temperate'),alpha = 0.5)+
+      geom_polygon(data=a4, mapping=aes(x=x, y=y, fill='andean'),alpha = 0.5)+
+      geom_polygon(data=a5, mapping=aes(x=x, y=y, fill='oceanic'),alpha = 0.5)+
+      geom_polygon(data=a6, mapping=aes(x=x, y=y, fill='subtropical'),alpha = 0.5)+
+      geom_polygon(data=a7, mapping=aes(x=x, y=y, fill='tropical'),alpha = 0.5)+
+      geom_point(data=selectClim, mapping=aes(x=Cindex, y=Tg), color = 'black', size=0.5)+
       geom_density2d(data=selectClim, mapping=aes(x=Cindex, y=Tg),color = 'black',alpha = 0.25)+
       scale_fill_manual("Legend", values = c("alpine" = "pink",
                                              "boreal" = "darkgreen",
                                              "temperate" = "greenyellow",
-                                             "andean" = "violet",
+                                             "andean" = "lightblue",
                                              "oceanic" = "darkcyan",
                                              "subtropical" = "orange",
                                              "tropical" = "darkred"
+                                          
       ))+
       scale_x_continuous(name= "Coldest Month (Annual Extreme Minimum)", 
-                         breaks=c(-40, -35, -30, -25, -20,-15, -10,-5, 0,5, 10,15, 20,25,30),
-                         labels=c('-40 (-55)', '-35 (-50)','-30 (-45)', '-25 (-40)','-20 (-35)','-15 (-30)','-10 (-25)',
+                         breaks=c(-45,-40, -35, -30, -25, -20,-15, -10,-5, 0,5, 10,15, 20,25,30),
+                         labels=c('-45 (-60)','-40 (-55)', '-35 (-50)','-30 (-45)', '-25 (-40)','-20 (-35)','-15 (-30)','-10 (-25)',
                                   '-5 (-20)','0 (-15)','5 (-10)','10 (-5)','15 (0)','20 (5)','25 (10)','30 (15)'))+
       scale_y_continuous(name= "Growing Season", breaks=c(0,6,12,18,24,30))+
-      coord_fixed(ratio = 1/1,xlim = c(-40,30), ylim = c(0, 30))+
+      coord_fixed(ratio = 1/1,xlim = c(-45,30), ylim = c(0, 33))+
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
-   theme(legend.position='right',axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0)) 
- #Supplemental Graph2----
+   theme_bw()+
+   theme(legend.position='right',axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0),
+         panel.grid.major = element_line(), panel.grid.minor = element_blank())
+ #Supplemental Graph3----
  bs1=data.frame(y=c(1,1,2,2), x=c(0,0.3333,0.3333,0))
  bs2=data.frame(y=c(2,2,3,3), x=c(0,1,1,0))
  bs3=data.frame(y=c(3,3,4,4), x=c(0,1,1,0))
@@ -361,7 +363,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bm4, mapping=aes(x=x, y=y, fill='subhumid'),alpha = 0.2)+
    geom_polygon(data=bm5, mapping=aes(x=x, y=y, fill='humid'),alpha = 0.2)+
    geom_polygon(data=bm6, mapping=aes(x=x, y=y, fill='perhumid'),alpha = 0.2)+
-   geom_point(data=selectClim, mapping=aes(y=SPindex, x=Mindex), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(y=SPindex, x=Mindex), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(y=SPindex, x=Mindex),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("isoxeric" = "red",
                                           "xerothermic" = "blue",
@@ -411,7 +413,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='subhumid'),alpha = 0.1)+
    geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='humid'),alpha = 0.1)+
    geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='perhumid'),alpha = 0.1)+
-   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Tg), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Tg), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(x=Mindex, y=Tg),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("alpine" = "cyan",
                                           "cool" = "green",
@@ -428,12 +430,12 @@ shinyServer(function(input, output, session) {
    scale_y_reverse(name= "Growing Season", breaks=c(6,12,18,24,30),
                    labels=c('alpine/arctic 6', 'cool 12', 'mild 18','warm 24','hot 30'))+
    scale_x_continuous(name= "P/PET Ratio", breaks=c(0, .1111, .2,0.3333,0.5,0.6667),
-                      labels=c('perarid', 'arid', 'semiarid','subhumid','humid','perhumid'))+
+                      labels=c('perarid', 'arid 0.125', 'semiarid 0.25','subhumid 0.5','humid 1','perhumid 2'))+
    coord_fixed(ratio = 1/30,ylim = c(0,30), xlim = c(0, 1))+
    
    labs(title = paste("Climate of ",selectClim[1,]$ECO_NAME, sep=""))+
    theme_bw()+
-   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 2.5, hjust = 1), 
+   theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 1), 
          axis.text.y = element_text(vjust = 0), 
          panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
 
@@ -451,7 +453,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=b3, mapping=aes(x=x, y=y, fill='d'),alpha = 0.2)+
    geom_polygon(data=b4, mapping=aes(x=x, y=y, fill='c'),alpha = 0.2)+
    geom_line(data=humidline, mapping=aes(x=x, y=y, fill='c'),color = 'black',alpha = 0.2)+
-   geom_point(data=selectClim, mapping=aes(x=Dindex, y=Sindex), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Dindex, y=Sindex), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(x=Dindex, y=Sindex),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c(
                                           "a" = "red",
@@ -497,7 +499,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
    geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
    geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
-   geom_point(data=selectClim, mapping=aes(x=Aindex, y=Tg), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Aindex, y=Tg), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(x=Aindex, y=Tg),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("alpine" = "cyan",
                                           "cool" = "green",
@@ -542,7 +544,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bmm4, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
    geom_polygon(data=bmm5, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
    geom_polygon(data=bmm6, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
-   geom_point(data=selectClim, mapping=aes(x=Cindex, y=Aindex), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Cindex, y=Aindex), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(x=Cindex, y=Aindex),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("polar" = "orange",
                                           "temperate" = "yellow",
@@ -585,7 +587,7 @@ shinyServer(function(input, output, session) {
    geom_polygon(data=bmm1, mapping=aes(x=x, y=y, fill='a'),alpha = 0.1)+
    geom_polygon(data=bmm2, mapping=aes(x=x, y=y, fill='b'),alpha = 0.1)+
    
-   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Dindex), color = 'black', size=0.1)+
+   geom_point(data=selectClim, mapping=aes(x=Mindex, y=Dindex), color = 'black', size=0.5)+
    geom_density2d(data=selectClim, mapping=aes(x=Mindex, y=Dindex),color = 'black',alpha = 0.25)+
    scale_fill_manual("Legend", values = c("perarid" = "red",
                                           "arid" = "orange",
