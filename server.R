@@ -53,9 +53,9 @@ shinyServer(function(input, output, session) {
     
     
     output$ECO_NAME = renderUI({
-
+      
       listEco1 <- subset(Biomeclimate,
-                           Latitude >= input$lat[1] &
+                         Latitude >= input$lat[1] &
                            Latitude <= input$lat[2] &
                            Longitude >= input$lon[1] &
                            Longitude <= input$lon[2] &
@@ -73,6 +73,17 @@ shinyServer(function(input, output, session) {
                   choices = unique(listEco), #calls list of available counties
                   selected = unique(listEco)[1])
     })
+    
+    
+    output$country = renderUI({
+      
+
+      
+      selectInput(inputId = "country", #name of input
+                  label = "Filter Lat-Lon by Admin Area:", #label displayed in ui
+                  choices = (unique(geomaxmin[,1])), #calls list of available counties
+                  selected = 'GLOBAL')
+    })
     output$elev = renderUI({
       
       sliderInput(inputId = 'elev',
@@ -83,20 +94,22 @@ shinyServer(function(input, output, session) {
       
     })
     output$lat = renderUI({
-      
+      latmax <- geomaxmin[geomaxmin$name %in% input$country, 'latmax']
+      latmin <- geomaxmin[geomaxmin$name %in% input$country, 'latmin']
       sliderInput(inputId = 'lat',
                   label = 'Latitude range',
                   min= -90, max= 90,
-                  value= c(25, 50), step = 1,
+                  value= c(latmin-0.5, latmax+0.5), step = 1,
                   dragRange = TRUE)
       
     })
     output$lon = renderUI({
-      
+      lonmax <- geomaxmin[geomaxmin$name %in% input$country, 'lonmax']
+      lonmin <- geomaxmin[geomaxmin$name %in% input$country, 'lonmin']
       sliderInput(inputId = 'lon',
                   label = 'Longitude range',
                   min= -180, max= 180,
-                  value= c(-150, -50), step = 2.5,
+                  value= c(lonmin-1.25, lonmax+1.25), step = 2.5,
                   dragRange = TRUE)
       
     })

@@ -17,6 +17,7 @@ fluidPage(
   sidebarPanel(
     htmlOutput("Biome"),
     htmlOutput("ECO_NAME"),
+    htmlOutput("country"),
     htmlOutput("elev"),
     htmlOutput("lat"),
     htmlOutput("lon"),

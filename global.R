@@ -1,5 +1,6 @@
 library(shiny)
 Biomeclimate <- readRDS(file='data/Biomeclimate.RDS')
+geomaxmin <- readRDS(file='data/geomaxmin.rds')
 Biomeclimate$ECO_NAME<- as.character(Biomeclimate$ECO_NAME) #needed to be able to control encoding
 Encoding(Biomeclimate$ECO_NAME) <- 'latin1' #needed to display correctly on server
 b1990 <- Biomeclimate[Biomeclimate$Norm == 1990,]
