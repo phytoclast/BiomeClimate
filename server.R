@@ -323,7 +323,17 @@ shinyServer(function(input, output, session) {
     a6=data.frame(x=c(0,0,15,15), y=c(18,36,36,18))
     a7=data.frame(x=c(15,15,36,18), y=c(18,36,36,18))
     
- climplot2 <-  ggplot() +
+    ll1 <- data.frame(x=c(-50,6), y=c(6,6))
+    ll2 <- data.frame(x=c(0,0), y=c(0,36))
+    ll3 <- data.frame(x=c(15,15), y=c(18,36))
+    l1 <- data.frame(x=c(-50,12), y=c(12,12))
+    l2 <- data.frame(x=c(-50,0), y=c(15,15))
+    l3 <- data.frame(x=c(-50,18), y=c(18,18))
+    l4 <- data.frame(x=c(0,24), y=c(24,24))
+    l5 <- data.frame(x=c(-10,-10), y=c(0,36))
+    l6 <- data.frame(x=c(-25,-25), y=c(0,36))
+
+    climplot2 <-  ggplot() +
       geom_polygon(data=a1, mapping=aes(x=x, y=y, fill='alpine'),alpha = 0.5)+
       geom_polygon(data=a2, mapping=aes(x=x, y=y, fill='boreal'),alpha = 0.5)+
       geom_polygon(data=a3, mapping=aes(x=x, y=y, fill='temperate'),alpha = 0.5)+
@@ -331,6 +341,16 @@ shinyServer(function(input, output, session) {
       geom_polygon(data=a5, mapping=aes(x=x, y=y, fill='oceanic'),alpha = 0.5)+
       geom_polygon(data=a6, mapping=aes(x=x, y=y, fill='subtropical'),alpha = 0.5)+
       geom_polygon(data=a7, mapping=aes(x=x, y=y, fill='tropical'),alpha = 0.5)+
+      
+      geom_line(data=ll1, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=ll2, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=ll3, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l1, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l2, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l3, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l4, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l5, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
+      geom_line(data=l6, mapping=aes(x=x, y=y),alpha = 0.3, color='black', linetype='solid')+
       geom_point(data=selectClim, mapping=aes(x=Cindex, y=Tg), color = 'black', size=0.5)+
       geom_density2d(data=selectClim, mapping=aes(x=Cindex, y=Tg),color = 'black',alpha = 0.25)+
       scale_fill_manual("Legend", values = c("alpine" = "pink",
@@ -340,7 +360,7 @@ shinyServer(function(input, output, session) {
                                              "oceanic" = "darkcyan",
                                              "subtropical" = "orange",
                                              "tropical" = "darkred"
-                                          
+                                             
       ))+
       scale_x_continuous(name= "Coldest Month (Annual Extreme Minimum)", 
                          breaks=c(-45,-40, -35, -30, -25, -20,-15, -10,-5, 0,5, 10,15, 20,25,30),
