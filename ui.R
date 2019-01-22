@@ -13,7 +13,7 @@ library(plyr)
 
 fluidPage(
   
-  headerPanel('Climate Graphs'),
+  headerPanel('Climate Graphs - solar radiation based'),
   sidebarPanel(
     htmlOutput("Biome"),
     htmlOutput("ECO_NAME"),
@@ -46,7 +46,7 @@ fluidPage(
                                        'Medieval Units' = 'USC'), 
                         selected = 'm')
     ),
-column(width = 5,
+    column(width = 5,
            radioButtons("RadioGraphtype",inline = T,  label = ("Select Graph"),
                         choiceNames = list(HTML("<font size=-2>Monthly"), 
                                            HTML("Summer × Winter"),
@@ -55,8 +55,10 @@ column(width = 5,
                                            HTML("Summer × pAET"),  
                                            HTML("Winter × pAET"),
                                            HTML("Moisture × Deficit"),
-                                           HTML("Moisture × Seasonality</font>")),
-                        choiceValues = list(1,2,4,5,6,7,8,3),
+                                           HTML("Moisture × Seasonality"),
+                                           HTML("Map</font>")),
+                        
+                        choiceValues = list(1,2,4,5,6,7,8,3,9),
                         selected = 1),
            HTML("</font>")
     )),

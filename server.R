@@ -65,7 +65,7 @@ shinyServer(function(input, output, session) {
                            TT <= input$temp[2] &
                            PP >= input$prec[1] &
                            PP <= input$prec[2] &
-                           grepl(input$Biome, biomname))
+                           (biomname %in% input$Biome))
       listEco <- sort(unique(listEco1[, c('ECO_NAME')]))
       
       selectInput(inputId = "ECO_NAME", #name of input
@@ -161,8 +161,8 @@ shinyServer(function(input, output, session) {
                            PP >= input$prec[1] &
                            PP <= input$prec[2] &
                            Norm == input$RadioNorm &
-                           grepl(biomnm, biomname) &
-                           grepl(econame, ECO_NAME))
+                           (biomname %in% biomnm) &
+                           (ECO_NAME  %in% econame))
     
     #Make Monthly Rows
     
@@ -217,7 +217,10 @@ shinyServer(function(input, output, session) {
     Tc<-mean(selectClim$Tc, na.rm=TRUE)
     Tcl<-mean(selectClim$Tcl, na.rm=TRUE)
     Tclx <- mean(selectClim$Tclx, na.rm=TRUE)
-    
+    graphymax = input$lat[2]#max(selectClim$Latitude)+10# 
+    graphymin = input$lat[1]#min(selectClim$Latitude)-10# 
+    graphxmax = input$lon[2]#max(selectClim$Longitude)+10# 
+    graphxmin = input$lon[1]#min(selectClim$Longitude)-10# 
     
     selectClim$SP1 <- round(ifelse(selectClim$PPETRatio < 0.5 & selectClim$Surplus < 25 & selectClim$pAET < 75, pmax(selectClim$Surplus/25, selectClim$pAET/75)  ,1),15)
     selectClim$SP2 <- round(ifelse(selectClim$SP1 >= 1, ifelse(selectClim$pAET < 75 & (selectClim$Deficit >= 150 | selectClim$PPETRatio < 1), pmax(selectClim$pAET/75, 150/(selectClim$Deficit+150)),1),0),15)
@@ -642,23 +645,40 @@ shinyServer(function(input, output, session) {
    theme_bw()+
    theme(legend.position='none', axis.text.x = element_text(angle = 90, vjust = 0, hjust = 0), 
          axis.text.y = element_text(vjust = 0),panel.grid.major = element_line(), panel.grid.minor = element_blank()) 
+ #map---- 
+ ocean = data.frame(y=c(-90,-90,90,90), x=c(-180,180,180,-180))
+ #hull <- selectClim %>%  slice(chull(Longitude, Latitude))
+ 
+ climplot9 <- ggplot() +
+   coord_fixed(ratio = 1/1,xlim = c(graphxmin,graphxmax), ylim = c(graphymin,graphymax))+
+   geom_polygon(data = ocean, 
+                aes(x = x, y = y),
+                color = 'darkgray', fill = 'lightcyan', size = .2)+
+   geom_polygon(data = statesf, 
+                aes(x = long, y = lat, group=group),
+                color = 'darkgray', fill = 'lightyellow', size = .2)+
+   geom_polygon(data = lakesf, 
+                aes(x = long, y = lat, group=group),
+                color = 'darkgray', fill = 'lightcyan', size = .2)+
+   #geom_polygon(data=hull, mapping=aes(x=Longitude, y=Latitude), color = 'red', size=0.5)+
+   
+   geom_point(data=selectClim, mapping=aes(x=Longitude, y=Latitude), color = 'red', size=1)+
+   
+   #guides(fill=FALSE)+
+   theme_void() 
  
  #----
  
- 
-if(input$RadioGraphtype == 1){climplot} 
-else if(input$RadioGraphtype == 2) {climplot2}
+ if(input$RadioGraphtype == 1){climplot} 
+ else if(input$RadioGraphtype == 2) {climplot2}
  else if(input$RadioGraphtype == 3) {climplot3}
  else if(input$RadioGraphtype == 4) {climplot4}
  else if(input$RadioGraphtype == 5) {climplot5}
  else if(input$RadioGraphtype == 6) {climplot6}
  else if(input$RadioGraphtype == 7) {climplot7}
-else{climplot8}
-
-    
-
-    
-
+ else if(input$RadioGraphtype == 8) {climplot8}
+ else{plot(climplot9)}
+ 
     })
 
     
